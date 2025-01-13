@@ -16,6 +16,14 @@ let computerScore = 0;
 possibleChoices.forEach((possibleChoice) =>
   possibleChoice.addEventListener("click", (e) => {
     playerChoice = e.target.id;
+    // Validate player choice before proceeding
+    if (!isValidChoice(playerChoice)) {
+      result = "Invalid choice! Please choose Rock, Paper, or Scissors.";
+      resultDisplay.style.color = "#ff5722"; // Set to red for invalid
+      resultDisplay.innerHTML = result;
+      return;
+    }
+
     playerChoiceDisplay.innerHTML = playerChoice;
     generateComputerChoice();
     getResult();
@@ -29,6 +37,11 @@ function generateComputerChoice() {
   const randomIndex = Math.floor(Math.random() * choices.length);
   computerChoice = choices[randomIndex];
   computerChoiceDisplay.innerHTML = computerChoice;
+}
+
+// Check if the input choice is valid
+function isValidChoice(choice) {
+  return ["Rock", "Paper", "Scissors"].includes(choice);
 }
 
 // Determine result
