@@ -1,0 +1,58 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.score,
+.levels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5vw;
+  margin-bottom: 2vw;
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  grid-gap: 1vw;
+  justify-content: center;
+  margin-bottom: 2vw;
+}
+.square {
+  width: 7.5vw;
+  height: 7.5vw;
+  border-radius: 0.5vw;
+  border: 0.25vw solid black;
+  cursor: pointer;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.mole {
+  background-image: url("resources/mole.jpg");
+  background-size: cover;
+}
+
+button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 1vw 2vw;
+  font-size: 1vw;
+  border-radius: 0.75vw;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+button:active {
+  transform: scale(1);
+}
