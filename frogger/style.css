@@ -1,0 +1,80 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.score {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5vw;
+  margin-bottom: 2vw;
+  text-align: center;
+}
+
+.grid {
+  border: 0.2vw solid black;
+  height: 25vw;
+  width: 24.1vw;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.grid div {
+  height: 2.67vw;
+  width: 2.67vw;
+}
+
+.endingBlock {
+  background-color: red;
+}
+.startingBlock {
+  background-color: blue;
+}
+
+button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 1vw 2vw;
+  font-size: 1vw;
+  border-radius: 0.75vw;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+  margin-bottom: 1vw;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+button:active {
+  transform: scale(1);
+}
+
+.l1,
+.l2,
+.l3 {
+  background-color: brown;
+}
+.l4,
+.l5 {
+  background-color: lightblue;
+}
+
+.c1 {
+  background-color: black;
+}
+
+.c2,
+.c3 {
+  background-color: lightgray;
+}
+
+.frog {
+  background-color: green;
+}
