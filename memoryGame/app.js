@@ -20,12 +20,15 @@ function shuffleCards() {
 
 let shuffledCards;
 const gridDisplay = document.querySelector("#grid");
+const bestScoreDisplay = document.getElementById("bestScore");
 
 let chosenCards = [];
 let chosenCardIds = [];
 let matchedCards = [];
 let score = 0;
 let moves = 0;
+let bestScore = localStorage.getItem("bestScore");
+bestScoreDisplay.textContent = bestScore || 0;
 
 // Create the board
 function createBoard() {
@@ -79,6 +82,8 @@ function checkForMatch() {
 
   if (matchedCards.length === cardsArray.length) {
     alert(`Congratulations! You found all matches in ${moves} moves!`);
+    localStorage.setItem("bestScore", Math.min(moves, bestScore));
+    bestScoreDisplay.textContent = Math.min(moves, bestScore);
   }
 }
 
