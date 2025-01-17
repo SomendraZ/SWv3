@@ -85,7 +85,7 @@ function moveInvaders() {
   }
 
   for (let i = 0; i < alienInvaders.length; i++) {
-    if (alienInvaders[i] > squares.length) {
+    if (alienInvaders[i] >= 224) {
       scoreDisplay.innerHTML = "Game Over";
       document.removeEventListener("keydown", moveShooter);
       document.removeEventListener("keyup", shoot);
@@ -108,6 +108,10 @@ function shoot(e) {
   function moveLaser() {
     squares[currentLaserIndex].classList.remove("laser");
     currentLaserIndex -= 15;
+    if (currentLaserIndex < 0) {
+      clearInterval(laserId);
+      return;
+    }
     squares[currentLaserIndex].classList.add("laser");
 
     if (squares[currentLaserIndex].classList.contains("invader")) {
