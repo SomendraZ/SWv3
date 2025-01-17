@@ -49,6 +49,7 @@ function getResult() {
   if (playerChoice === computerChoice) {
     result = "It's a draw!";
     resultDisplay.style.color = "#ff9800"; // Orange for a draw
+    new Audio("sounds/draw.mp3").play();
   } else if (
     (playerChoice === "Rock" && computerChoice === "Scissors") ||
     (playerChoice === "Paper" && computerChoice === "Rock") ||
@@ -57,10 +58,12 @@ function getResult() {
     result = "You win!";
     resultDisplay.style.color = "#4caf50"; // Green for win
     playerScore++;
+    new Audio("sounds/win.mp3").play();
   } else {
     result = "You lose!";
     resultDisplay.style.color = "#f44336"; // Red for lose
     computerScore++;
+    new Audio("sounds/lose.mp3").play();
   }
   resultDisplay.innerHTML = result;
 }
