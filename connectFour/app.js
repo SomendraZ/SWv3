@@ -9,34 +9,38 @@ document.addEventListener("DOMContentLoaded", function () {
     squares[i].onclick = function () {
       if (!gameActive) return;
 
-      if (
-        squares[i + 7] &&
-        squares[i + 7].classList.contains("taken") &&
-        !squares[i].classList.contains("taken")
-      ) {
-        if (currPlayer === 1) {
-          squares[i].classList.add("taken", "player1");
-          currPlayer = 2;
-        } else {
-          squares[i].classList.add("taken", "player2");
-          currPlayer = 1;
-        }
-        displayCurrentPlayer.innerHTML = currPlayer;
-      } else if (!squares[i + 7]) {
-        if (!squares[i].classList.contains("taken")) {
-          if (currPlayer === 1) {
-            squares[i].classList.add("taken", "player1");
-            currPlayer = 2;
-          } else {
-            squares[i].classList.add("taken", "player2");
-            currPlayer = 1;
+      if (!squares[i].classList.contains("taken")) {
+        let currentIndex = i;
+
+        function fall() {
+          if (currentIndex - 7 >= 0) {
+            squares[currentIndex - 7].classList.remove("player1", "player2");
           }
-          displayCurrentPlayer.innerHTML = currPlayer;
+
+          if (currPlayer === 1) {
+            squares[currentIndex].classList.add("player1");
+          } else {
+            squares[currentIndex].classList.add("player2");
+          }
+
+          if (
+            currentIndex + 7 < squares.length &&
+            !squares[currentIndex + 7].classList.contains("taken")
+          ) {
+            currentIndex += 7;
+            setTimeout(fall, 100);
+          } else {
+            squares[currentIndex].classList.add("taken");
+            currPlayer = currPlayer === 1 ? 2 : 1;
+            displayCurrentPlayer.innerHTML = currPlayer;
+            checkBoard();
+          }
         }
+
+        fall();
       } else {
         alert("Invalid move! You cannot go here.");
       }
-      checkBoard();
     };
   }
 
