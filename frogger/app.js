@@ -5,6 +5,8 @@ const logsLeft = document.querySelectorAll(".logLeft");
 const logsRight = document.querySelectorAll(".logRight");
 const carsLeft = document.querySelectorAll(".carLeft");
 const carsRight = document.querySelectorAll(".carRight");
+const audio = document.querySelector("#backgroundAudio");
+const startButton = document.querySelector("#startButton");
 
 let currIdx = 76;
 let result = 0;
@@ -12,6 +14,11 @@ let timerId = null;
 let timeRemaining = 30;
 let gameStarted = false;
 let gameOver = false;
+
+// Audio files
+const jumpSound = new Audio("sounds/jump.mp3");
+const collisionSound = new Audio("sounds/collision.mp3");
+const goalSound = new Audio("sounds/goal.mp3");
 
 function renderFrog() {
   squares.forEach((square) => square.classList.remove("frog"));
@@ -37,7 +44,7 @@ function moveFrog(e) {
       if (currIdx % 9 < 8) currIdx += 1;
       break;
   }
-
+  jumpSound.play();
   renderFrog();
   setTimeout(checkGameState, 50);
 }
@@ -49,7 +56,9 @@ function checkGameState() {
     document.removeEventListener("keyup", moveFrog);
     gameStarted = false;
     gameOver = true;
+    goalSound.play();
     alert("You win this round!");
+    audio.pause();
   }
 }
 
@@ -124,7 +133,9 @@ function loss() {
       clearInterval(timerId);
       document.removeEventListener("keyup", moveFrog);
       gameOver = true;
+      collisionSound.play();
       alert("Game Over! You lost!");
+      audio.pause();
     }
   }
 }
@@ -133,7 +144,8 @@ function restartGame() {
   location.reload();
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+startButton.addEventListener("click", () => {
+  audio.play();
   gameStarted = true;
   renderFrog();
   document.addEventListener("keyup", moveFrog);
@@ -149,6 +161,9 @@ document.addEventListener("DOMContentLoaded", () => {
       document.removeEventListener("keyup", moveFrog);
       alert("Time's up! You lose!");
       gameOver = true;
+      audio.pause();
     }
   }, 1000);
+
+  startButton.style.display = "none"; // Hide the button after starting the game
 });
