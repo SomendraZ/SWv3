@@ -1,5 +1,8 @@
 const grid = document.querySelector(".grid");
 const scoreDisplay = document.querySelector(".score");
+const brickBreakSound = new Audio("sounds/brickBreak.mp3");
+const gameWinSound = new Audio("sounds/win.mp3");
+const gameOverSound = new Audio("sounds/lose.mp3");
 const blockWidth = 7.5;
 const blockHeight = 1.5;
 const ballDiameter = 1.5;
@@ -68,21 +71,26 @@ function drawBall() {
 }
 
 function moveUser(e) {
+  const paddleSpeed = 3; // Adjust this value to change the paddle speed
   switch (e.key) {
     case "ArrowLeft":
       if (currentPosition[0] > 0) {
-        currentPosition[0] -= 1.5;
+        currentPosition[0] -= paddleSpeed;
+        if (currentPosition[0] < 0) currentPosition[0] = 0; // Prevent going off the left edge
         drawUser();
       }
       break;
     case "ArrowRight":
       if (currentPosition[0] < boardWidth - blockWidth) {
-        currentPosition[0] += 1.5;
+        currentPosition[0] += paddleSpeed;
+        if (currentPosition[0] > boardWidth - blockWidth)
+          currentPosition[0] = boardWidth - blockWidth; // Prevent going off the right edge
         drawUser();
       }
       break;
   }
 }
+
 document.addEventListener("keydown", moveUser);
 
 function moveBall() {
@@ -106,10 +114,12 @@ function checkForCollisions() {
       blocks.splice(i, 1);
       changeDirection();
       score++;
+      brickBreakSound.play();
       scoreDisplay.textContent = `Score: ${score}`;
       if (blocks.length === 0) {
         scoreDisplay.textContent = "You Win!";
         clearInterval(timerId);
+        gameWinSound.play();
         document.removeEventListener("keydown", moveUser);
       }
     }
@@ -135,6 +145,7 @@ function checkForCollisions() {
   if (ballCurrentPosition[1] <= 0) {
     clearInterval(timerId);
     scoreDisplay.textContent = "Game Over!";
+    gameOverSound.play();
     document.removeEventListener("keydown", moveUser);
   }
 }
