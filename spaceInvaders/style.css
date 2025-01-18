@@ -46,6 +46,10 @@ body {
   background-color: darkorange;
 }
 
+.alien-laser {
+  background-color: cyan;
+}
+
 button {
   background-color: #4caf50;
   color: white;
