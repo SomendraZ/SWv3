@@ -2,46 +2,65 @@ const squares = document.querySelectorAll(".square");
 const timeLeft = document.querySelector("#timeLeft");
 const score = document.querySelector("#score");
 const startBtn = document.querySelector("#start");
+const bestScore = document.querySelector("#bestScore");
 
 let result = 0;
 let hitPosition;
 let currTime = 60;
 let timerId = null;
-let countDownTimer = null; // Declare this globally
+let countDownTimer = null;
+let gameActive = false;
+let best = localStorage.getItem("bestScoreWhac") || 0;
+const hitSound = new Audio("sounds/hit.mp3");
 
-// Function to pick a random square
+bestScore.textContent = best;
+
 function randomSquare() {
+  if (!gameActive) return;
+
   squares.forEach((square) => {
-    square.classList.remove("mole");
+    square.classList.remove("mole", "bonusMole");
   });
 
   const randomPosition = squares[Math.floor(Math.random() * squares.length)];
-  randomPosition.classList.add("mole");
+  const isBonus = Math.random() < 0.2;
 
-  hitPosition = randomPosition.id;
+  if (isBonus) {
+    randomPosition.classList.add("bonusMole");
+    hitPosition = { id: randomPosition.id, type: "bonus" };
+  } else {
+    randomPosition.classList.add("mole");
+    hitPosition = { id: randomPosition.id, type: "regular" };
+  }
 }
 
-// Add event listeners to squares
 squares.forEach((square) => {
   square.addEventListener("mouseup", () => {
-    if (square.id === hitPosition) {
-      result++;
+    if (!gameActive || !hitPosition) return;
+
+    if (square.id === hitPosition.id) {
+      if (hitPosition.type === "bonus") {
+        result += 5;
+      } else {
+        result++;
+      }
+
       score.textContent = result;
       hitPosition = null;
+
       clearInterval(timerId);
       randomSquare();
       timerId = setInterval(randomSquare, 1000);
+      hitSound.play();
     }
   });
 });
 
-// Function to move the mole at regular intervals
 function moveMole() {
-  randomSquare(); // Ensure the mole appears immediately
+  randomSquare();
   timerId = setInterval(randomSquare, 1000);
 }
 
-// Countdown timer
 function countDown() {
   currTime--;
   timeLeft.textContent = currTime;
@@ -49,26 +68,32 @@ function countDown() {
   if (currTime === 0) {
     clearInterval(countDownTimer);
     clearInterval(timerId);
+    gameActive = false;
+
+    if (result > best) {
+      best = result;
+      localStorage.setItem("bestScoreWhac", best);
+      bestScore.textContent = best;
+    }
+
     alert(`Game Over! Your final score is ${result}!`);
+    startBtn.disabled = false;
   }
 }
 
-// Start/Restart the game
 startBtn.addEventListener("click", () => {
-  // Clear any existing timers to avoid glitches
   clearInterval(timerId);
   clearInterval(countDownTimer);
 
-  // Reset game state
   result = 0;
   currTime = 60;
   score.textContent = result;
   timeLeft.textContent = currTime;
 
-  // Start mole movement and countdown
+  gameActive = true;
   moveMole();
   countDownTimer = setInterval(countDown, 1000);
 
-  // Update button text
+  startBtn.disabled = true;
   startBtn.innerHTML = "Restart";
 });
